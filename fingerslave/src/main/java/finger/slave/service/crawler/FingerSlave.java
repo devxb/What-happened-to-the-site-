@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import finger.slave.domain.vo.*;
 
 @Service
-public class FingerSlaveCrawler{
+public class FingerSlave{
 	
 	public Site doWork(String url){
 		return null;

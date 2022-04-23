@@ -1,4 +1,4 @@
-package finger.slave.service.crawler;
+package finger.slave.service.collector;
 
 import org.springframework.stereotype.Service;
 

@@ -5,7 +5,7 @@ import org.springframework.web.client.*;
 
 import java.net.*;
 
-@Service
+@Service(value="HTMLFingerCrawler")
 public class HTMLFingerCrawler implements FingerCrawler{
 	
 	private final RestTemplate restTemplate;

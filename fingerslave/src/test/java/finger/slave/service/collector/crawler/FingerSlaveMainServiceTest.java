@@ -25,7 +25,7 @@ public class FingerSlaveMainServiceTest{
 	
 	@Autowired
 	@Qualifier("hyperLinkParser")
-	private FingerParser<String> hyperLinkParser;
+	private FingerParser hyperLinkParser;
 	
 	@Test
 	public void Crawl_Google_Test(){

@@ -11,7 +11,7 @@ import java.util.*;
 import finger.slave.service.util.*;
 
 @Service
-public class HyperLinkParser implements FingerParser<String>{
+public class HyperLinkParser implements FingerParser{
 	
 	@Override
 	public Map<String, ParameterWrapper> parse(String content, String... uris){

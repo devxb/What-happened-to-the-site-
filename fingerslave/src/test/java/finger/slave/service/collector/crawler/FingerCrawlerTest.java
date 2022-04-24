@@ -17,15 +17,11 @@ import finger.slave.service.util.*;
 import java.util.*;
 
 @SpringBootTest
-public class FingerSlaveMainServiceTest{
+public class FingerCrawlerTest{
 	
 	@Autowired
 	@Qualifier("HTMLFingerCrawler")
 	private FingerCrawler crawler;
-	
-	@Autowired
-	@Qualifier("hyperLinkParser")
-	private FingerParser hyperLinkParser;
 	
 	@Test
 	public void Crawl_Google_Test(){
@@ -37,19 +33,6 @@ public class FingerSlaveMainServiceTest{
 			
 		// then
 		assertTrue(!content.equals(""));
-	}
-	
-	@Test
-	public void Parse_HyperLinks_Google_Test(){
-		// given
-		String uri = "https://google.com";
-		
-		// when
-		String content = this.crawler.crawl(uri);
-		Map<String, ParameterWrapper> hyperLinkMap = this.hyperLinkParser.parse(content, uri);
-		
-		// then
-		assertTrue(!hyperLinkMap.isEmpty());
 	}
 	
 }

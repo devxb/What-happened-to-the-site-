@@ -2,12 +2,8 @@ package finger.slave.service.builder;
 
 import org.springframework.beans.factory.annotation.*;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.mockito.junit.jupiter.*;
-import org.mockito.InjectMocks;
 
 import java.util.*;
 import java.time.*;
@@ -15,11 +11,9 @@ import java.time.*;
 import finger.slave.domain.vo.*;
 import finger.slave.service.util.*;
 
-@ExtendWith(MockitoExtension.class)
 public class KeywordReflectiveBuilderTest{
 	
-	@InjectMocks
-	private KeywordReflectiveBuilder keywordBuilder;
+	private KeywordReflectiveBuilder keywordBuilder = new KeywordReflectiveBuilder();
 	
 	private String testWord = "test word";
 	private Integer testCount = 777;

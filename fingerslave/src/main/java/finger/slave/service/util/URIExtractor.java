@@ -5,6 +5,7 @@ import java.net.*;
 public class URIExtractor{
 	
 	public static boolean isRelativePath(String uri){
+		if(uri.isEmpty()) return true;
 		return uri.charAt(0) == '/';
 	}
 	

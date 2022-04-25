@@ -10,8 +10,8 @@ import finger.slave.service.util.*;
 
 public class FingerParserTest{
 	
-	private FingerParser hyperLinkParser = new HyperLinkParser();
-	private FingerParser keywordParser = new KeywordParser();
+	private FingerParser<String> hyperLinkParser = new HyperLinkParser();
+	private FingerParser<Integer> keywordParser = new KeywordParser();
 	
 	@Test
 	public void Parse_HyperLinks_Test(){
@@ -20,7 +20,7 @@ public class FingerParserTest{
 		String content = this.getContent();
 		
 		// when
-		Map<String, ParameterWrapper> hyperLinkMap = this.hyperLinkParser.parse(content, uri);
+		Map<String, String> hyperLinkMap = this.hyperLinkParser.parse(content, uri);
 		
 		// then
 		assertTrue(!hyperLinkMap.isEmpty());
@@ -32,18 +32,18 @@ public class FingerParserTest{
 		String content = this.getContent();
 		
 		// when
-		Map<String, ParameterWrapper> keywordMap = this.keywordParser.parse(content, "채용", "가입", "recruit", "Join", "join", "인턴", "모집", "신청");
+		Map<String, Integer> keywordMap = this.keywordParser.parse(content, "채용", "가입", "recruit", "Join", "join", "인턴", "모집", "신청");
 		
 		// then
 		assertTrue(!keywordMap.isEmpty());
-		assertEquals(keywordMap.get("채용").unWrap(), 4);
-		assertEquals(keywordMap.get("가입").unWrap(), 3);
-		assertEquals(keywordMap.get("신청").unWrap(), 0);
-		assertEquals(keywordMap.get("인턴").unWrap(), 2);
-		assertEquals(keywordMap.get("recruit").unWrap(), 1);
-		assertEquals(keywordMap.get("Join").unWrap(), 2);
-		assertEquals(keywordMap.get("join").unWrap(), 1);
-		assertEquals(keywordMap.get("모집").unWrap(), 3);
+		assertEquals(keywordMap.get("채용"), 4);
+		assertEquals(keywordMap.get("가입"), 3);
+		assertEquals(keywordMap.get("신청"), 0);
+		assertEquals(keywordMap.get("인턴"), 2);
+		assertEquals(keywordMap.get("recruit"), 1);
+		assertEquals(keywordMap.get("Join"), 2);
+		assertEquals(keywordMap.get("join"), 1);
+		assertEquals(keywordMap.get("모집"), 3);
 	}
 	
 	private String getContent(){

@@ -4,8 +4,8 @@ import finger.slave.service.util.ParameterWrapper;
 
 import java.util.Map;
 
-public interface FingerParser{
+public interface FingerParser<T extends Object>{
 	
-	public Map<String, ParameterWrapper> parse(String content, String... parameters);
+	public Map<String, T> parse(String content, String... parameters);
 	
 }

@@ -24,8 +24,7 @@ public class FingerSlaveTest{
 		Site result = this.fingerSlave.work(uri);
 		
 		// then
-		assertEquals(result.getUri(), "root");
-		assertEquals(result.getRelationSites().size(), 1);
+		assertEquals(result.getUri(), uri);
 	}
 	
 }

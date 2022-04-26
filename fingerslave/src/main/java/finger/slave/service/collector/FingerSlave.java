@@ -22,50 +22,49 @@ public class FingerSlave{
 	
 	public Site work(String uri){
 		PriorityQueue<URIDepth> uriDepths = new PriorityQueue<URIDepth>();
-		uriDepths.add(new URIDepth(uri, 0, this.rootSite()));
+		uriDepths.add(new URIDepth(uri, 0));
 		Set<String> visitedURIs = new HashSet<String>();
 		Site site = this.doWork(uriDepths, visitedURIs);
 		return site;
 	}
 	
-	private Site rootSite(){
-		return new SiteImpl.SiteImplBuilder()
-			.uri("root")
-			.updatedDate(LocalDate.now())
-			.build();
-	}
-	
 	private Site doWork(PriorityQueue<URIDepth> uriDepths, Set<String> visitedURIs){
-		Site rootSite = uriDepths.peek().parentSite;
+		Site rootSite = this.getRootSite(uriDepths.peek().uri);
 		while(!uriDepths.isEmpty()){
 			URIDepth nowURIDepth = uriDepths.poll();
 			if(visitedURIs.contains(nowURIDepth.uri) || nowURIDepth.isOverDepth(this.recursionDepth.depth())) continue;
 			visitedURIs.add(nowURIDepth.uri);
 			
 			String htmlContent = this.htmlFingerCrawler.crawl(nowURIDepth.uri);
-			Site nextParentSite = this.makeSite(nowURIDepth.parentSite, nowURIDepth.uri, htmlContent);
-			
-			this.addNextURIDepths(htmlContent, nowURIDepth, uriDepths, nextParentSite);
+			this.connectRootSite(nowURIDepth.uri, htmlContent, rootSite);
+			this.addNextURIDepths(htmlContent, nowURIDepth, uriDepths);
 		}
 		return rootSite;
 	}
 	
-	private Site makeSite(Site parentSite, String uri, String htmlContent){
+	private Site getRootSite(String uri){
+		return new RootSite.RootSiteBuilder()
+			.uri(uri)
+			.updatedDate(LocalDate.now())
+			.contentLength(uri.length())
+			.build();
+	}
+	
+	private void connectRootSite(String uri, String htmlContent, Site rootSite){
 		List<Keyword> nowKeywords = this.makeKeywords(htmlContent);
-		Site site = new SiteImpl.SiteImplBuilder()
+		Site site = new LeafSite.LeafSiteBuilder()
 			.uri(uri)
 			.contentLength(htmlContent.length())
 			.updatedDate(LocalDate.now())
-			.keywords(nowKeywords)
 			.build();
-		parentSite.setRelationSite(site);
-		return site;
+		site.addKeywords(nowKeywords);
+		rootSite.addRelationSite(site);
 	}
 	
 	private List<Keyword> makeKeywords(String htmlContent){
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		Map<String, Integer> keywordMap = this.keywordParser.parse(htmlContent, 
-																   "채용", "가입", "recruit", "Join", "join", "인턴", "모집", "신청");
+																   "채용", "가입", "recruit", "RECRUIT", "Recruit", "Join", "join", "JOIN", "인턴", "모집", "신청");
 		for(Map.Entry<String, Integer> keywordEntry : keywordMap.entrySet()){
 			Keyword keyword = new KeywordImpl.KeywordImplBuilder()
 				.word(keywordEntry.getKey())
@@ -76,13 +75,13 @@ public class FingerSlave{
 		return keywords;
 	}
 	
-	private void addNextURIDepths(String htmlContent, URIDepth uriDepth, PriorityQueue<URIDepth> uriDepths, Site parentSite){
+	private void addNextURIDepths(String htmlContent, URIDepth uriDepth, PriorityQueue<URIDepth> uriDepths){
 		Map<String, String> hyperLinkMap = this.hyperLinkParser.parse(htmlContent, uriDepth.uri);
 		for(Map.Entry<String, String> hyperLinkEntry : hyperLinkMap.entrySet()) {
 			if(this.isIgnoreUri(hyperLinkEntry.getValue())) continue;
 			if(this.isDifferHost(uriDepth.uri, hyperLinkEntry.getValue())) 
-				uriDepths.add(new URIDepth(hyperLinkEntry.getValue(), Math.max(this.recursionDepth.depth(), uriDepth.depth+1), parentSite));
-			else uriDepths.add(new URIDepth(hyperLinkEntry.getValue(), uriDepth.depth+1, parentSite));
+				uriDepths.add(new URIDepth(hyperLinkEntry.getValue(), Math.max(this.recursionDepth.depth(), uriDepth.depth+1)));
+			else uriDepths.add(new URIDepth(hyperLinkEntry.getValue(), uriDepth.depth+1));
 		}
 	}
 	
@@ -120,14 +119,12 @@ public class FingerSlave{
 	
 	private static class URIDepth implements Comparable<URIDepth>{
 		
-		private Site parentSite;
 		private String uri;
 		private Integer depth;
 		
-		public URIDepth(String uri, Integer depth, Site parentSite){
+		public URIDepth(String uri, Integer depth){
 			this.uri = this.convertUri(uri);
 			this.depth = depth;
-			this.parentSite = parentSite;
 		}
 		
 		private String convertUri(String uri){

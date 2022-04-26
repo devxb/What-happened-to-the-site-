@@ -10,18 +10,35 @@ public interface Site{
 	public LocalDate getUpdatedDate();
 	public List<Site> getRelationSites();
 	public Site getRelaitonSite(String uri);
-	public void setRelationSite(Site site);
-	public void setRelationSites(List<Site> sites);
 	public List<Keyword> getKeywords();
 	public Keyword getKeyword(String keyword);
+	public void addKeyword(Keyword keyword);
+	public void addKeywords(List<Keyword> keywords);
 	
-	public static abstract class SiteBuilder<T extends Site>{
+	public void addRelationSite(Site site);
+	public void addRelationSites(List<Site> sites);
+	
+	public abstract static class SiteBuilder<T extends Site>{
 		
-		public abstract SiteBuilder<T> uri(String uri);
-		public abstract SiteBuilder<T> contentLength(Integer contentLength);
-		public abstract SiteBuilder<T> updatedDate(LocalDate updatedDate);
-		public abstract SiteBuilder<T> keywords(List<Keyword> keywords);
-		public abstract SiteBuilder<T> keyword(Keyword keyword);
+		protected String uri;
+		protected Integer contentLength;
+		protected LocalDate updatedDate;
+		
+		public SiteBuilder<T> uri(String uri){
+			this.uri = uri;
+			return this;
+		}
+		
+		public SiteBuilder<T> contentLength(Integer contentLength){
+			this.contentLength = contentLength;
+			return this;
+		}
+		
+		public SiteBuilder<T> updatedDate(LocalDate updatedDate){
+			this.updatedDate = updatedDate;
+			return this;
+		}
+		
 		public abstract T build();
 		
 	}

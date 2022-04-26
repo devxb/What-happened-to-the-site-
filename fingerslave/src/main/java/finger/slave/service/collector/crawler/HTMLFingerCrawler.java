@@ -15,7 +15,7 @@ public class HTMLFingerCrawler implements FingerCrawler{
 		try{
 			return restTemplate.getForObject(new URI(uri), String.class);
 		}catch(URISyntaxException USE){
-			
+			return "";
 		}catch(Exception e){
 			e.printStackTrace();
 		}

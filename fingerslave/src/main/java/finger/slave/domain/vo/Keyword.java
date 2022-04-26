@@ -5,10 +5,21 @@ public interface Keyword{
 	public String getWord();
 	public Integer getCount();
 	
-	public static abstract class KeywordBuilder<T extends Keyword>{
+	public abstract static class KeywordBuilder<T extends Keyword>{
 		
-		abstract public KeywordBuilder<T> word(String word);
-		abstract public KeywordBuilder<T> count(Integer count);
+		protected String word;
+		protected Integer count;
+		
+		public KeywordBuilder<T> word(String word){
+			this.word = word;
+			return this;
+		}
+		
+		public KeywordBuilder<T> count(Integer count){
+			this.count = count;
+			return this;
+		}
+		
 		abstract public T build();
 		
 	}

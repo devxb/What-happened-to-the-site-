@@ -15,27 +15,16 @@ public class KeywordImpl implements Keyword{
 		return this.count;
 	}
 	
+	private KeywordImpl(){
+		this(null);
+	}
+	
 	private KeywordImpl(KeywordImplBuilder builder){
 		this.word = builder.word;
 		this.count = builder.count;
 	}
 	
 	public static class KeywordImplBuilder extends KeywordBuilder<KeywordImpl>{
-		
-		private String word;
-		private Integer count;
-		
-		@Override
-		public KeywordBuilder<KeywordImpl> word(String word){
-			this.word = word;
-			return this;
-		}
-		
-		@Override
-		public KeywordBuilder<KeywordImpl> count(Integer count){
-			this.count = count;
-			return this;
-		}
 		
 		@Override
 		public KeywordImpl build(){

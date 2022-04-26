@@ -21,8 +21,8 @@ dependencies {
 	// SpringBoot - Apache License
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	// runtimeOnly 'mysql:mysql-connector-java'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'mysql:mysql-connector-java'
 	
 	// HttpClient - Apache License
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'

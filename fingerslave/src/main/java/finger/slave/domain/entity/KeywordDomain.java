@@ -8,7 +8,7 @@ public class KeywordDomain{
 	
 	@Id
 	@GeneratedValue
-	@Column(name="ID")
+	@Column(name="KEYWORD_ID")
 	private Long keywordId;
 	
 	@Column(name="WORD")
@@ -18,8 +18,8 @@ public class KeywordDomain{
 	private Integer count;
 	
 	@ManyToOne
-	@JoinColumn(name="ID")
-	private RootSiteDomain rootSite;
+	@JoinColumn(name="SITE_ID")
+	private SiteDomain site;
 	
 	public String getWord(){
 		return this.word;
@@ -32,14 +32,14 @@ public class KeywordDomain{
 	public KeywordDomain(Builder builder){
 		this.word = builder.word;
 		this.count = builder.count;
-		this.rootSite = builder.rootSite;
+		this.site = builder.site;
 	}
 	
 	public static class Builder{
 		
 		private String word;
 		private Integer count;
-		private RootSiteDomain rootSite;
+		private SiteDomain site;
 		
 		public Builder word(String word){
 			this.word = word;
@@ -51,8 +51,8 @@ public class KeywordDomain{
 			return this;
 		}
 		
-		public Builder rootSite(RootSiteDomain rootSite){
-			this.rootSite = rootSite;
+		public Builder site(SiteDomain site){
+			this.site = site;
 			return this;
 		}
 		

@@ -19,6 +19,8 @@ public class FingerSlave{
 	private final FingerParser<Integer> keywordParser;
 	private final RecursionDepth recursionDepth;
 	private final List<String> ignorePatterns;
+	@Value("#{fingerProperties['fingerslave.target.patterns']}")
+	private String[] patterns;
 	
 	public Site work(String uri){
 		PriorityQueue<URIDepth> uriDepths = new PriorityQueue<URIDepth>();
@@ -34,7 +36,6 @@ public class FingerSlave{
 			URIDepth nowURIDepth = uriDepths.poll();
 			if(visitedURIs.contains(nowURIDepth.uri) || nowURIDepth.isOverDepth(this.recursionDepth.depth())) continue;
 			visitedURIs.add(nowURIDepth.uri);
-			
 			String htmlContent = this.htmlFingerCrawler.crawl(nowURIDepth.uri);
 			this.connectRootSite(nowURIDepth.uri, htmlContent, rootSite);
 			this.addNextURIDepths(htmlContent, nowURIDepth, uriDepths);
@@ -63,8 +64,7 @@ public class FingerSlave{
 	
 	private List<Keyword> makeKeywords(String htmlContent){
 		List<Keyword> keywords = new ArrayList<Keyword>();
-		Map<String, Integer> keywordMap = this.keywordParser.parse(htmlContent, 
-																   "채용", "가입", "recruit", "RECRUIT", "Recruit", "Join", "join", "JOIN", "인턴", "모집", "신청");
+		Map<String, Integer> keywordMap = this.keywordParser.parse(htmlContent, this.patterns);
 		for(Map.Entry<String, Integer> keywordEntry : keywordMap.entrySet()){
 			Keyword keyword = new KeywordImpl.KeywordImplBuilder()
 				.word(keywordEntry.getKey())

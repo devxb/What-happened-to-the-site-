@@ -18,7 +18,9 @@ public class FingerSlave{
 	private final FingerParser<String> hyperLinkParser;
 	private final FingerParser<Integer> keywordParser;
 	private final RecursionDepth recursionDepth;
-	private final List<String> ignorePatterns;
+	
+	@Value("#{fingerProperties['fingerslave.ignore.uris']}")
+	private String[] ignoreUris;
 	@Value("#{fingerProperties['fingerslave.target.patterns']}")
 	private String[] patterns;
 	
@@ -92,8 +94,8 @@ public class FingerSlave{
 	}
 	
 	private boolean isIgnoreUri(String uri){
-		for(String pattern : this.ignorePatterns)
-			if(PatternCounter.count(uri, pattern) > 0) return true;
+		for(String ignored : this.ignoreUris)
+			if(PatternCounter.count(uri, ignored) > 0) return true;
 		return false;
 	}
 	
@@ -105,16 +107,6 @@ public class FingerSlave{
 		this.hyperLinkParser = hyperLinkParser;
 		this.keywordParser = keywordParser;
 		this.recursionDepth = RecursionDepth.EASY;
-		this.ignorePatterns = new ArrayList<String>();
-		this.setIgnorePatterns();
-	}
-	
-	private void setIgnorePatterns(){
-		this.ignorePatterns.add("github");
-		this.ignorePatterns.add("javascript");
-		this.ignorePatterns.add("youtube");
-		this.ignorePatterns.add("linkedin");
-		this.ignorePatterns.add("facebook");
 	}
 	
 	private static class URIDepth implements Comparable<URIDepth>{

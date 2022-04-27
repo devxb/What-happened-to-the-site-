@@ -6,7 +6,7 @@ import org.springframework.core.io.*;
 import java.nio.charset.*;
 
 @Configuration
-public class PropertyConfig{
+public class PropertyConfiguration{
 	
 	@Bean
 	public PropertiesFactoryBean fingerProperties(){

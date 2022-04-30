@@ -10,43 +10,41 @@ public class RootSite implements Site{
 	private final LocalDate updatedDate;
 	private List<Site> relationSites;
 	private List<Keyword> keywords;
-	
-	@Override 
-	public String getUri(){
-		return this.uri;
-	}
+	private final StringBuffer siteInfoBuffer;
 	
 	@Override
-	public Integer getContentLength(){
-		return this.contentLength;
+	public String getSiteInfo(){
+		if(this.isInfoEmpty()) this.buildSiteInfo();
+		return this.siteInfoBuffer.toString();
 	}
 	
-	@Override 
-	public LocalDate getUpdatedDate(){
-		return this.updatedDate;
+	private boolean isInfoEmpty(){
+		return this.siteInfoBuffer.length() == 0;
 	}
 	
-	@Override 
-	public List<Site> getRelationSites(){
-		return this.relationSites;
+	private void buildSiteInfo(){
+		this.siteInfoBuffer.append("URI : ").append(this.uri)
+			.append(" ContentLength : ").append(this.contentLength)
+			.append(" Updated at : ").append(this.updatedDate);
+		this.buildKeywordInfo();
+		this.buildRelationSiteInfo();
 	}
 	
-	@Override 
-	public Site getRelaitonSite(String uri){
-		for(Site site : this.relationSites) if(site.getUri().equals(uri)) return site;
-		return null;
-	}
-	
-	@Override 
-	public List<Keyword> getKeywords(){
-		return this.keywords;
-	}
-	
-	@Override 
-	public Keyword getKeyword(String word){
+	private void buildKeywordInfo(){
+		this.siteInfoBuffer.append(" Keywords : ");
 		for(Keyword keyword : this.keywords)
-			if(keyword.getWord().equals(word)) return keyword;
-		return null;
+			this.siteInfoBuffer.append("(")
+			.append(keyword.getWord())
+			.append(" : ")
+			.append(keyword.getCount())
+			.append(") ");
+	}
+	
+	private void buildRelationSiteInfo(){
+		this.siteInfoBuffer.append(" RelationSites : ");
+		for(Site site : this.relationSites)
+			this.siteInfoBuffer.append("\n")
+				.append(site.getSiteInfo());
 	}
 	
 	@Override
@@ -69,7 +67,6 @@ public class RootSite implements Site{
 		this.keywords = keywords;
 	}
 	
-	
 	private RootSite(){
 		this(null);
 	}
@@ -80,6 +77,7 @@ public class RootSite implements Site{
 		this.updatedDate = builder.updatedDate;
 		this.keywords = new ArrayList<Keyword>();
 		this.relationSites = new ArrayList<Site>();
+		this.siteInfoBuffer = new StringBuffer();
 	}
 	
 	public static class RootSiteBuilder extends SiteBuilder<RootSite>{

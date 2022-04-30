@@ -4,17 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface Site{
-	
-	public String getUri();
-	public Integer getContentLength();
-	public LocalDate getUpdatedDate();
-	public List<Site> getRelationSites();
-	public Site getRelaitonSite(String uri);
-	public List<Keyword> getKeywords();
-	public Keyword getKeyword(String keyword);
+
+	public String getSiteInfo();
 	public void addKeyword(Keyword keyword);
 	public void addKeywords(List<Keyword> keywords);
-	
 	public void addRelationSite(Site site);
 	public void addRelationSites(List<Site> sites);
 	

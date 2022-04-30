@@ -9,42 +9,33 @@ public class LeafSite implements Site{
 	private final Integer contentLength;
 	private final LocalDate updatedDate;
 	private List<Keyword> keywords;
-	
-	@Override 
-	public String getUri(){
-		return this.uri;
-	}
+	private StringBuffer siteInfoBuffer;
 	
 	@Override
-	public Integer getContentLength(){
-		return this.contentLength;
+	public String getSiteInfo(){
+		if(this.isInfoEmpty()) this.buildSiteInfo();
+		return this.siteInfoBuffer.toString();
 	}
 	
-	@Override 
-	public LocalDate getUpdatedDate(){
-		return this.updatedDate;
+	private boolean isInfoEmpty(){
+		return this.siteInfoBuffer.length() == 0;
 	}
 	
-	@Override 
-	public List<Site> getRelationSites(){
-		return null;
+	private void buildSiteInfo(){
+		this.siteInfoBuffer.append("URI : ").append(this.uri)
+			.append(" ContentLength : ").append(this.contentLength)
+			.append(" Updated at : ").append(this.updatedDate);
+		this.buildKeywordInfo();
 	}
 	
-	@Override 
-	public Site getRelaitonSite(String uri){
-		return null;
-	}
-	
-	@Override 
-	public List<Keyword> getKeywords(){
-		return this.keywords;
-	}
-	
-	@Override 
-	public Keyword getKeyword(String word){
+	private void buildKeywordInfo(){
+		this.siteInfoBuffer.append(" Keywords : ");
 		for(Keyword keyword : this.keywords)
-			if(keyword.getWord().equals(word)) return keyword;
-		return null;
+			this.siteInfoBuffer.append("(")
+			.append(keyword.getWord())
+			.append(" : ")
+			.append(keyword.getCount())
+			.append(") ");
 	}
 	
 	@Override
@@ -76,6 +67,7 @@ public class LeafSite implements Site{
 		this.contentLength = builder.contentLength;
 		this.updatedDate = builder.updatedDate;
 		this.keywords = new ArrayList<Keyword>();
+		this.siteInfoBuffer = new StringBuffer();
 	}
 	
 	public static class LeafSiteBuilder extends SiteBuilder<LeafSite>{

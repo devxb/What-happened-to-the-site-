@@ -24,7 +24,7 @@ public class FingerSlaveTest{
 		Site result = this.fingerSlave.work(uri);
 		
 		// then
-		assertEquals(result.getUri(), uri);
+		assertNotEquals(" ", result.getSiteInfo());
 	}
 	
 }
